@@ -126,6 +126,3 @@ with open('final_matches.csv','w') as out:
     for row in final_matches:
         csv_out.writerow(row)
 
-
-
-
