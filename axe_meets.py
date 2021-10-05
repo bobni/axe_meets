@@ -1,6 +1,7 @@
 import numpy as np 
 import pandas as pd
 import csv
+import random
 
 # we'll keep track of who wanted to meet with whom here
 interest_list = {}
@@ -11,6 +12,7 @@ with open('axe_meets.csv', newline='') as csvfile:
 	next(reader)
 	for row in reader:
 		interest_list[row[1]] = row[2].split(",")
+		random.shuffle(interest_list[row[1]])
 
 #let's clean any irregularities in the file
 interest_list = {k: [v.strip() for v in vs] for k, vs in interest_list.items()}
