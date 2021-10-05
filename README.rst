@@ -1,10 +1,7 @@
-Sample Module Repository
-========================
+Welcome! This will be the home for the matching algorithm for Axe Meets. 
 
-This simple project is an example repo for Python projects.
+This is all still very much under construction, but we hope to iterate and make this dynamic.
 
-`Learn more <http://www.kennethreitz.org/essays/repository-structure-and-python>`_.
+The corresponding Google input form is here, and only currently accessible to Berkeley Haas: https://docs.google.com/forms/d/e/1FAIpQLSdQZdng-QwabJ6kCUDEVOlbwqypIp_P2oObZwbG2QQO9zvXaA/viewform?usp=sf_link
 
----------------
-
-If you want to learn more about ``setup.py`` files, check out `this repository <https://github.com/kennethreitz/setup.py>`_.
+Please email bobni@berkeley.edu if you have any questions!
