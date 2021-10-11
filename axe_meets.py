@@ -7,12 +7,15 @@ import random
 interest_list = {}
 
 #let's parse the excel file
-with open('axe_meets.csv', newline='') as csvfile:
+with open('axe_meets_101021.csv', newline='') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='"')
 	next(reader)
 	for row in reader:
-		interest_list[row[1]] = row[2].split(",")
-		random.shuffle(interest_list[row[1]])
+		if row[6].strip() == "Yes":
+			interest_list[row[1].strip()] = row[2].split(",")
+			random.shuffle(interest_list[row[1]])
+
+print("Total: " + str(len(interest_list)))
 
 #let's clean any irregularities in the file
 interest_list = {k: [v.strip() for v in vs] for k, vs in interest_list.items()}
@@ -40,12 +43,12 @@ for person, interests in interest_list.items():
 	secondary_matches[person] = []
 
 	for interest in interests:
-
-		if person in interest_list[interest]:
-			top_matches[person].append(interest)
-			match_list[person] += 1
-		else:
-			secondary_matches[person].append(interest)
+		if interest in interest_list and interest != person:
+			if person in interest_list[interest]:
+				top_matches[person].append(interest)
+				match_list[person] += 1
+			else:
+				secondary_matches[person].append(interest)
 
 # now we iterate through all of the people
 # prioritizing ones that have the lowest number of two way matches
@@ -56,8 +59,6 @@ no_matches = {key: value for key, value in match_list.items() if value == 0}
 
 
 prioritized_names = sorted(have_matches, key=lambda k: have_matches[k])
-
-print(prioritized_names)
 
 #now let's begin matching
 
@@ -87,9 +88,10 @@ for name in prioritized_names:
 			completed[match] = 1
 			total_two_way_matches += 1
 			break
+print(final_matches)
 
 # with the names left over, let's try to find any one-way matches that work
-remaining_names = match_list.keys()
+remaining_names = list(match_list.keys())
 
 for name in remaining_names:
 	# if we already found a match, don't do anything
@@ -99,7 +101,7 @@ for name in remaining_names:
 	# let's search through the names' one way matches and find if any
 	# of them are still available
 	for match in secondary_matches[name]:
-		if match in match_list:
+		if match in remaining_names:
 			final_matches.append((name,match))
 			del match_list[match]
 			del match_list[name]
@@ -120,7 +122,7 @@ for x, y in pairwise(remaining_names):
 
 print(final_matches)
 
-with open('final_matches.csv','w') as out:
+with open('final_matches_101021.csv','w', newline='') as out:
     csv_out=csv.writer(out)
     csv_out.writerow(['Name 1','Name 2'])
     for row in final_matches:
