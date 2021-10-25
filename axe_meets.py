@@ -6,19 +6,38 @@ import random
 # we'll keep track of who wanted to meet with whom here
 interest_list = {}
 
+date = "102421"
+
+emails = {}
+
 #let's parse the excel file
-with open('axe_meets_101021.csv', newline='') as csvfile:
+with open('axe_meets_' + date + '.csv', newline='') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='"')
 	next(reader)
 	for row in reader:
+		emails[row[1].strip()] = row[5].strip()
 		if row[6].strip() == "Yes":
 			interest_list[row[1].strip()] = row[2].split(",")
 			random.shuffle(interest_list[row[1]])
+
+
 
 print("Total: " + str(len(interest_list)))
 
 #let's clean any irregularities in the file
 interest_list = {k: [v.strip() for v in vs] for k, vs in interest_list.items()}
+
+#let's parse previous matches excel file
+with open('final_matches_previous.csv', newline='') as csvfile:
+	reader = csv.reader(csvfile, delimiter=',', quotechar='"')
+	next(reader)
+	for row in reader:
+		if row[0].strip() in interest_list \
+		and row[1].strip() in interest_list[row[0].strip()]:
+			interest_list[row[0].strip()].remove(row[1].strip())
+		if row[1].strip() in interest_list \
+		and row[0].strip() in interest_list[row[1].strip()]:
+			interest_list[row[1].strip()].remove(row[0].strip())
 
 # edges = [(a, b) for a, bs in interest_list.items() for b in bs]
 
@@ -88,7 +107,6 @@ for name in prioritized_names:
 			completed[match] = 1
 			total_two_way_matches += 1
 			break
-print(final_matches)
 
 # with the names left over, let's try to find any one-way matches that work
 remaining_names = list(match_list.keys())
@@ -122,9 +140,14 @@ for x, y in pairwise(remaining_names):
 
 print(final_matches)
 
-with open('final_matches_101021.csv','w', newline='') as out:
+with open('final_matches_' + date + '.csv','w', newline='') as out:
     csv_out=csv.writer(out)
     csv_out.writerow(['Name 1','Name 2'])
+    for row in final_matches:
+        csv_out.writerow(row)
+
+with open('final_matches_previous.csv','a', newline='') as out:
+    csv_out=csv.writer(out)
     for row in final_matches:
         csv_out.writerow(row)
 
