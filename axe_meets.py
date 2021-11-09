@@ -6,7 +6,7 @@ import random
 # we'll keep track of who wanted to meet with whom here
 interest_list = {}
 
-date = "102421"
+date = "110821"
 
 emails = {}
 
@@ -106,6 +106,7 @@ for name in prioritized_names:
 			completed[name] = 1
 			completed[match] = 1
 			total_two_way_matches += 1
+			print(match,name)
 			break
 
 # with the names left over, let's try to find any one-way matches that work
@@ -119,16 +120,18 @@ for name in remaining_names:
 	# let's search through the names' one way matches and find if any
 	# of them are still available
 	for match in secondary_matches[name]:
-		if match in remaining_names:
+		if match in remaining_names and match in match_list:
 			final_matches.append((name,match))
 			del match_list[match]
 			del match_list[name]
 			completed[name] = 1
 			completed[match] = 1
 			total_one_way_matches += 1
+			print(match,name)
 			break
 
 # with the names left over, let's try to find match the rest together
+print (remaining_names)
 remaining_names = match_list.keys()
 
 def pairwise(iterable):
@@ -140,12 +143,14 @@ for x, y in pairwise(remaining_names):
 
 print(final_matches)
 
+#output this week's matches
 with open('final_matches_' + date + '.csv','w', newline='') as out:
     csv_out=csv.writer(out)
     csv_out.writerow(['Name 1','Name 2'])
     for row in final_matches:
         csv_out.writerow(row)
 
+#keep track of previous matches
 with open('final_matches_previous.csv','a', newline='') as out:
     csv_out=csv.writer(out)
     for row in final_matches:
