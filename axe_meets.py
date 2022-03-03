@@ -6,7 +6,7 @@ import random
 # we'll keep track of who wanted to meet with whom here
 interest_list = {}
 
-date = "110821"
+date = "030222"
 
 emails = {}
 
@@ -131,7 +131,7 @@ for name in remaining_names:
 			break
 
 # with the names left over, let's try to find match the rest together
-print (remaining_names)
+
 remaining_names = match_list.keys()
 
 def pairwise(iterable):
@@ -139,9 +139,23 @@ def pairwise(iterable):
     return zip(a, a)
 
 for x, y in pairwise(remaining_names):
-	final_matches.append((name,match))
+	final_matches.append((x,y))
 
 print(final_matches)
+
+interest_list_dict = {}
+
+final_matches_names = [idx for tup in final_matches for idx in tup]
+print(final_matches_names)
+for name in interest_list:
+	if name not in final_matches_names:
+		print("Missing:" + name)
+	else:
+		if name in interest_list_dict:
+			print("Duplicated:" + name)
+		else:
+			interest_list_dict[name] = 1
+
 
 #output this week's matches
 with open('final_matches_' + date + '.csv','w', newline='') as out:
